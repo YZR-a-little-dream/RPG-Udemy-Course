@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
     public float dashDuration;
     public float dashDir {get;private set;}                     //冲刺方向，避免朝向与冲刺方向
                                                                 //的不一致的问题
-
     [Header("Collision info")]
     [SerializeField] private Transform groundCheck;             //地面检查
     [SerializeField] private float groundCheckDistance;
