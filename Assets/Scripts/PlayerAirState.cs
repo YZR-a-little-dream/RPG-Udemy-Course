@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 
 public class PlayerAirState : PlayerState
@@ -23,10 +24,14 @@ public class PlayerAirState : PlayerState
     public override void Update()
     {
         base.Update();
+
+        if(player.IsWallDeteced())
+            stateMachine.ChangeState(player.wallSlideState); 
+        
         if(player.IsGroundedDetected())
             stateMachine.ChangeState(player.idleState);
 
         if(xInput != 0)
-            player.SetVelocity(player.moveSpeed * .8f * xInput,rb.velocity.y);
+            player.SetVelocity(player.moveSpeed * .8f * xInput,rb.velocity.y);              
     }
 }

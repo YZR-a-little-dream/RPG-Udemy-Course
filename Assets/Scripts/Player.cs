@@ -17,12 +17,14 @@ public class Player : MonoBehaviour
     public float dashDuration;
     public float dashDir {get;private set;}                     //冲刺方向，避免朝向与冲刺方向
                                                                 //的不一致的问题
-    [Header("Collision info")]
+    #region  Collidion info
+    [Header("Collision info")]                                                          
     [SerializeField] private Transform groundCheck;             //地面检查
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Transform wallCheck;               //墙壁检查
     [SerializeField] private float wallCheckDistance;   
     [SerializeField] private LayerMask whatIsGround;            //准备射线检测的layerMask
+    #endregion
 
     public int facingDir {get; private set;} = 1;               //玩家面朝的方向
     private bool facingRight = true;
@@ -48,6 +50,10 @@ public class Player : MonoBehaviour
 
     public PlayerWallSlideState wallSlideState{get; private set;}
 
+    public PlayerWallJumpState wallJumpState{get;private set;}  
+
+    public PlayerPrimaryAttack primaryAttack {get; private set;}
+
     #endregion
 
     private void Awake() {
@@ -59,10 +65,12 @@ public class Player : MonoBehaviour
         airState = new PlayerAirState(this,stateMachine,"Jump");
         dashState = new PlayerDashState(this,stateMachine,"Dash");
         wallSlideState = new PlayerWallSlideState(this, stateMachine, "WallSlide");
+        wallJumpState = new PlayerWallJumpState(this, stateMachine,"Jump");
+
+        primaryAttack = new PlayerPrimaryAttack(this,stateMachine,"Attack");
     }
 
     private void Start() {
-
         anim = GetComponentInChildren<Animator>();
         rb = GetComponentInChildren<Rigidbody2D>();
 
@@ -74,10 +82,16 @@ public class Player : MonoBehaviour
 
         CheckForDashInput();
     }
+    
+    //如果完成动画将trigger置真
+    public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
     private void CheckForDashInput()
     {
         dashUsageTimer -= Time.deltaTime;
+
+        if(IsWallDeteced())
+           return;
 
         if(Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0) 
         {
@@ -101,6 +115,9 @@ public class Player : MonoBehaviour
 
     public bool IsGroundedDetected() => 
         Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
+
+    public bool IsWallDeteced() =>
+        Physics2D.Raycast(wallCheck.position,Vector2.right * facingDir,wallCheckDistance,whatIsGround);
 
     private void OnDrawGizmos()
     {
