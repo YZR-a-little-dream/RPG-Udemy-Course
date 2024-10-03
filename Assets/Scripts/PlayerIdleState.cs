@@ -13,20 +13,19 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        rb.velocity = Vector2.zero;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        if(xInput != 0)
-           stateMachine.ChangeState(player.moveState);
+        player.ZeroVelocity();
     }
 
     public override void Exit()
     {
         base.Exit();
+    }
+    public override void Update()
+    {
+        base.Update();
+
+        if(xInput != 0 && !player.isBusy)
+           stateMachine.ChangeState(player.moveState);
     }
 
 }

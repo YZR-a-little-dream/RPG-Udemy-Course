@@ -2,10 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Attack details")]
+    public Vector2[] attackMovement;
+
+    public bool isBusy {get; private set;}          //用于解决角色攻击时滑步的问题
     [Header("Move info")]
     public float moveSpeed = 8f;
     public float jumpForce;
@@ -83,6 +88,16 @@ public class Player : MonoBehaviour
         CheckForDashInput();
     }
     
+    //用来处理状态占用问题，避免可以滑步攻击的发生
+    public IEnumerator BusyFor(float _seconds)
+    {
+        isBusy = true;
+    
+        yield return new WaitForSeconds(_seconds);
+        
+        isBusy = false;
+    }
+
     //如果完成动画将trigger置真
     public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
@@ -106,13 +121,17 @@ public class Player : MonoBehaviour
             stateMachine.ChangeState(dashState);
         }
     }
+    #region  Velocity
+    public void ZeroVelocity() => rb.velocity = Vector2.zero;
 
     public void SetVelocity(float _xVelocity,float _yVelocity)
     {
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
         FilpController(_xVelocity);
     }
+    #endregion
 
+    #region Collision  
     public bool IsGroundedDetected() => 
         Physics2D.Raycast(groundCheck.position,Vector2.down,groundCheckDistance,whatIsGround);
 
@@ -126,7 +145,9 @@ public class Player : MonoBehaviour
         Gizmos.DrawLine(wallCheck.position,new Vector3(wallCheck.position.x 
             + wallCheckDistance,wallCheck.position.y));
     }
+    #endregion
 
+    #region  Filp
     public void Filp()
     {
         facingDir *= -1;
@@ -144,4 +165,5 @@ public class Player : MonoBehaviour
             Filp();
         }
     }
+    #endregion
 }
