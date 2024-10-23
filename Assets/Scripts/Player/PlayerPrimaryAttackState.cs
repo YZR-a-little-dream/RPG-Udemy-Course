@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPrimaryAttack : PlayerState
+public class PlayerPrimaryAttackState : PlayerState
 {
     private int comboCounter;                   //攻击组合记数
     private float lastTimerAttacked;            //最后一次攻击的时间
     private float comboWidow = 2;               //连击经过多长时间重置，默认值设为2
-    public PlayerPrimaryAttack(Player _player, PlayerStateMachine _playerStateMachine, string _animaBoolName) : base(_player, _playerStateMachine, _animaBoolName)
+    public PlayerPrimaryAttackState(Player _player, PlayerStateMachine _playerStateMachine, string _animaBoolName) : base(_player, _playerStateMachine, _animaBoolName)
     {
 
     }
@@ -23,9 +23,12 @@ public class PlayerPrimaryAttack : PlayerState
 
         player.anim.SetInteger("ComboCounter", comboCounter);
 
-        player.SetVelocity(player.attackMovement[comboCounter].x * player.facingDir,
+        //Choose attack direction
+        float attackDir;
+        attackDir = xInput != 0 ?  xInput:player.facingDir;
+
+        player.SetVelocity(player.attackMovement[comboCounter].x * attackDir,
                             player.attackMovement[comboCounter].y);
-        Debug.Log(player.attackMovement[comboCounter] * player.facingDir);
         stateTimer = .1f;
     }
 
@@ -33,7 +36,6 @@ public class PlayerPrimaryAttack : PlayerState
     {
         base.Exit();
 
-        
         player.StartCoroutine("BusyFor",.15f);
 
         comboCounter++;
