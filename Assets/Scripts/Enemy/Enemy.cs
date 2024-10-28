@@ -7,6 +7,12 @@ public class Enemy : Entity
 {
     [SerializeField] protected LayerMask wharIsPlayer;
 
+    [Header("Stunned info")]
+    public float stunDuration;
+    public Vector2 stunDireciton;
+    protected bool canBeStunned;
+    [SerializeField] protected GameObject counterImage;     //反击时的红色方块
+
     [Header("Move info")]
     public float moveSpeed;
     public float idleTime;
@@ -29,6 +35,28 @@ public class Enemy : Entity
         base.Update();
         
         stateMachine.currentState.Update();
+    }
+
+    public virtual void OpenCounterAttackWidow()
+    {
+        canBeStunned = true;
+        counterImage.SetActive(true);
+    }
+
+    public virtual void CloseCounterAttackWidow()
+    {
+        canBeStunned = false;
+        counterImage.SetActive(false);
+    }
+
+    public virtual bool CanbeStunned()
+    {
+        if(canBeStunned)
+        {
+            CloseCounterAttackWidow();
+            return true;
+        }
+        return false;
     }
 
     public virtual void AnimationFinishTrigger() =>

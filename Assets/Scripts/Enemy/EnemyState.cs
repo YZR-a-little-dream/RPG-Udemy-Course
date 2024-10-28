@@ -24,7 +24,7 @@ public class EnemyState
     public virtual void Update()
     {
         stateTimer -= Time.deltaTime;
-        Debug.Log("Update:" + stateMachine.currentState);
+        //Debug.Log("Update:" + stateMachine.currentState);
     }
 
     public virtual void Enter()
@@ -33,14 +33,14 @@ public class EnemyState
         rb = enemyBase.rb;
         enemyBase.anim.SetBool(animBoolName,true);
 
-        Debug.Log("Enter:" + stateMachine.currentState);
+        //Debug.Log("Enter:" + stateMachine.currentState);
     }
 
     public virtual void Exit()
     {
         enemyBase.anim.SetBool(animBoolName,false);
 
-        Debug.Log("Exit:" + stateMachine.currentState);
+        //Debug.Log("Exit:" + stateMachine.currentState);
     }
 
     public virtual void AnimationFinishTrigger() => triggerCalled = true;
