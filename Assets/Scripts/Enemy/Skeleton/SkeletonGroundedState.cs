@@ -18,8 +18,7 @@ public class SkeletonGroundedState : EnemyState
     {
         base.Enter();
 
-        //FIXME: 后续会通过玩家管理器（playerManager）来获取位置信息
-        player = GameObject.Find("Player").transform;
+        player = PlayerManager.instance.transform;
     }
 
     public override void Exit()
