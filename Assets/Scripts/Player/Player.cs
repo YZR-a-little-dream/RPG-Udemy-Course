@@ -15,14 +15,15 @@ public class Player : Entity
     [Header("Move info")]
     public float moveSpeed = 8f;
     public float jumpForce;
+    public float swordReturnImpact;                 //剑回收的反作用力
 
     [Header("Dash info")]
     public float dashSpeed;
     public float dashDuration;
-    public float dashDir {get;private set;}                     //冲刺方向，避免朝向与冲刺方向
-                                                                //的不一致的问题
+    public float dashDir {get;private set;}         //冲刺方向，避免朝向与冲刺方向的不一致的问题
 
-    public SkillManager skill{get; private set;}
+    public SkillManager skill {get; private set;}
+    public GameObject sword {get; private set;}
 
     #region  States
     public PlayerStateMachine stateMachine {get; private set;}
@@ -35,7 +36,8 @@ public class Player : Entity
     public PlayerWallJumpState wallJumpState{get;private set;}  
     public PlayerPrimaryAttackState primaryAttack {get; private set;}
     public PlayerCounterAttackState counterAttack {get; private set;}
-
+    public PlayerAimSwordState aimSword {get; private set;}
+    public PlayerCatchSwordState catchSword {get; private set;}
     #endregion
 
     protected override void Awake() {
@@ -53,6 +55,9 @@ public class Player : Entity
 
         primaryAttack = new PlayerPrimaryAttackState(this,stateMachine,"Attack");
         counterAttack = new PlayerCounterAttackState(this,stateMachine,"CounterAttack");
+
+        aimSword = new PlayerAimSwordState(this,stateMachine,"AimSword");
+        catchSword = new PlayerCatchSwordState(this,stateMachine,"CatchSword");
     }
 
     protected override void Start() {
@@ -71,6 +76,17 @@ public class Player : Entity
         CheckForDashInput();
     }
     
+    public void AssignNewSowrd(GameObject _newSowrd) 
+    {
+        sword = _newSowrd;
+    }
+
+    public void CatchTheSword()
+    {
+        stateMachine.ChangeState(catchSword);
+        Destroy(sword);
+    }
+
     //用来处理状态占用问题，避免可以滑步攻击的发生
     public IEnumerator BusyFor(float _seconds)
     {

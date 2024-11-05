@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
@@ -25,6 +26,11 @@ public class PlayerGroundedState : PlayerState
     {
         base.Update();
 
+        if(Input.GetKeyDown(KeyCode.Mouse1) && HasNoSword())
+        {
+            stateMachine.ChangeState(player.aimSword);
+        }
+
         if(Input.GetKeyDown(KeyCode.Q))
         {
             stateMachine.ChangeState(player.counterAttack);
@@ -42,5 +48,15 @@ public class PlayerGroundedState : PlayerState
 
         if(Input.GetKeyDown(KeyCode.Space) && player.IsGroundedDetected())
             stateMachine.ChangeState(player.jumpState);
+    }
+
+    private bool HasNoSword()
+    {
+        if(!player.sword)                   //Íæ¼ÒÎÞ½£
+            return true;
+        
+        player.sword.GetComponent<Sword_Skill_Controller>().ReturenSword();
+
+        return false;
     }
 }
