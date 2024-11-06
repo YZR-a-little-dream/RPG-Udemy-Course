@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Clone_skill : MonoBehaviour
@@ -11,11 +8,11 @@ public class Clone_skill : MonoBehaviour
     [Space]
     [SerializeField] private bool canAttack;
     
-    public void CreateClone(Transform _clonePosition)
+    public void CreateClone(Transform _clonePosition,Vector3 _offset = new Vector3())
     {
         GameObject newClone = Instantiate(clonePrefab);
 
-        newClone.GetComponent<Clone_Skill_Controller>().SetupClone(_clonePosition,cloneDuration,canAttack);
+        newClone.GetComponent<Clone_Skill_Controller>().SetupClone(_clonePosition,cloneDuration,canAttack,_offset);
 
     }
 }
