@@ -14,6 +14,11 @@ public class Clone_Skill_Controller : MonoBehaviour
     [SerializeField] private Transform attackCheck;
     [SerializeField] private float attackCheckRadius = 0.8f;
     private Transform closestEnemy;
+    private int facingDir = 1;
+
+
+    private bool canDuplicateClone;
+    private float chanceToDuplicate;
 
     private void Awake() {
         sr = GetComponent<SpriteRenderer>();
@@ -34,7 +39,9 @@ public class Clone_Skill_Controller : MonoBehaviour
         }
     }
 
-    public void SetupClone(Transform _newTransform,float _cloneDuration,bool _canAttack,Vector3 _offset)
+    public void SetupClone(Transform _newTransform,float _cloneDuration,
+                    bool _canAttack,Vector3 _offset,Transform _clonestEnemy,
+                    bool _canDuplicateClone,float _chanceToDuplicate)
     {
         if(_canAttack)
         {
@@ -45,6 +52,9 @@ public class Clone_Skill_Controller : MonoBehaviour
         transform.position = _newTransform.position + _offset;
         cloneTimer = _cloneDuration;
 
+        closestEnemy = _clonestEnemy;
+        canDuplicateClone = _canDuplicateClone;
+        chanceToDuplicate = _chanceToDuplicate;
         FaceClosestTarget();
     }
 
@@ -56,39 +66,33 @@ public class Clone_Skill_Controller : MonoBehaviour
     private void AttackTrigger()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackCheck.position,attackCheckRadius);
-
+        
         foreach(var hit in colliders)
         {
+            //FIXME: 连续多次进行反击后，会让facingdir = 1，从而导致找不到攻击目标
             if(hit.GetComponent<Enemy>() != null)
             {
                 hit.GetComponent<Enemy>().Damage();
+
+                if(canDuplicateClone)
+                {
+                    if(UnityEngine.Random.Range(0,100) < chanceToDuplicate)    //百分之九十九的可能满足条件
+                    {
+                        SkillManager.instance.clone.CreateClone(hit.transform,new Vector3(0.75f * facingDir,0));
+                    }
+                }
             }
         }
     }
 
     private void FaceClosestTarget()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position,25);
-
-        float closestDistance = math.INFINITY;
-
-        foreach(var hit in colliders)
-        {
-            if(hit.GetComponent<Enemy>() != null)
-            {
-               float distanceToEnemy = Vector2.Distance(transform.position, hit.transform.position);
-                if(distanceToEnemy < closestDistance)
-                {
-                    closestDistance = distanceToEnemy;
-                    closestEnemy = hit.transform;
-                }
-            }
-        }
-
         if(closestEnemy != null)
         {
-            if(transform.position.x > closestEnemy.position.x )
+            if(transform.position.x >= closestEnemy.position.x )
             {
+                
+                facingDir = -1;
                 transform.Rotate(0,180,0);
             }
         }

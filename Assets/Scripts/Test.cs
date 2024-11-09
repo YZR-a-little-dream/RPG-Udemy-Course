@@ -9,11 +9,8 @@ public class Test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("mousePosition:" + Input.mousePosition);
-            Debug.Log("worldPosition:" +Camera.main.ScreenToWorldPoint(Input.mousePosition));
-        }
+        transform.position = Vector2.MoveTowards(transform.position,
+                        transform.position + new Vector3(5,5),5 * Time.deltaTime);
         
     }
 }
