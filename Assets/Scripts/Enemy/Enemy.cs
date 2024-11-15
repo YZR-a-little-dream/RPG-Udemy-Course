@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Enemy : Entity
 {
@@ -25,6 +26,7 @@ public class Enemy : Entity
     [HideInInspector] public float lastTimeAttacked;
 
     public EnemyStateMachine stateMachine { get; private set; }
+    public string lastAnimBoolName { get; private set; }        //ËÀÍöÃû³Æ¶¯»­
 
     protected override void Awake() {
         base.Awake();
@@ -38,6 +40,23 @@ public class Enemy : Entity
         base.Update();
         
         stateMachine.currentState.Update();
+    }
+
+    public virtual void AssignLastAnimName(string _animBoolName) =>lastAnimBoolName = _animBoolName;
+
+    public override void SlowEntityby(float _slowPercentage, float _slowDuration)
+    {
+        moveSpeed = moveSpeed * (1 - _slowPercentage);
+        anim.speed = anim.speed * (1 - _slowPercentage);
+
+        Invoke("RetuenDefaultSpeed",_slowDuration);
+    }
+    
+    protected override void RetuenDefaultSpeed()
+    {
+        base.RetuenDefaultSpeed();
+
+        moveSpeed = defaultMoveSpeed;
     }
 
     public virtual void FreezeTime(bool _timeFrozen)

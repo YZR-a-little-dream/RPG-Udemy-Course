@@ -72,7 +72,7 @@ public class Clone_Skill_Controller : MonoBehaviour
             //FIXME: 连续多次进行反击后，会让facingdir = 1，从而导致找不到攻击目标
             if(hit.GetComponent<Enemy>() != null)
             {
-                hit.GetComponent<Enemy>().Damage();
+                PlayerManager.instance.player.stats.DoDamage(hit.GetComponent<CharacterStats>());
 
                 if(canDuplicateClone)
                 {

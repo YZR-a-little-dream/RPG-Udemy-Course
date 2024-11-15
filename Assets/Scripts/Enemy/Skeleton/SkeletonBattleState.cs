@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkeletonBattleState : EnemyState
 {
-    private Transform player;           //找到玩家坐标
+    private Transform player;           //??????????
     private Enemy_Skeleton enemy;
     private int moveDir;
 
@@ -37,7 +37,7 @@ public class SkeletonBattleState : EnemyState
         }
         else
         {
-            //追击时间少于0 或者超过追击距离
+            //??????????0 ??????????????
             if(stateTimer < 0 || Vector2.Distance(player.transform.position,enemy.transform.position) > 10)
                 stateMachine.ChangeState(enemy.idleState);
         }

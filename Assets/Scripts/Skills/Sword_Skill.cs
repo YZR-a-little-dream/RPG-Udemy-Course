@@ -106,7 +106,7 @@ public class Sword_Skill : Skill
 
         newSwordScript.SetupSword(finalDir,swordGravity,player,freezeTimeDuration,returnSpeed);
 
-        player.AssignNewSowrd(newSword);
+        player.AssignNewSword(newSword);
 
         DotsActive(false);
     }
