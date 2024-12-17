@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerPrimaryAttackState : PlayerState
 {
-    private int comboCounter;                   //攻击组合记数
-    private float lastTimerAttacked;            //最后一次攻击的时间
-    private float comboWidow = 2;               //连击经过多长时间重置，默认值设为2
+    public int comboCounter{get;private set;}       //攻击组合记数
+    private float lastTimerAttacked;                //最后一次攻击的时间
+    private float comboWidow = 2;                   //连击经过多长时间重置，默认值设为2
     public PlayerPrimaryAttackState(Player _player, PlayerStateMachine _playerStateMachine, string _animaBoolName) : base(_player, _playerStateMachine, _animaBoolName)
     {
 

@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class Sword_Skill_Controller : MonoBehaviour
@@ -218,9 +216,13 @@ public class Sword_Skill_Controller : MonoBehaviour
     private void SwordSkillDamage(Enemy enemy)
     {
         player.stats.DoDamage(enemy.GetComponent<CharacterStats>());
-        enemy.StartCoroutine("FreezeTimerFor", freezeTimeDuration);
-    }
+        enemy.FreezeTimeFor(freezeTimeDuration);
+        
+        ItemData_Equipment equipedAmult = Inventory.instance.GetEquipment(EquipmentType.Amulet);
 
+        equipedAmult?.Effect(enemy.transform);
+    }
+ 
     private void SetupTargetsForBounce(Collider2D collision)
     {
         if (collision.GetComponent<Enemy>() != null)

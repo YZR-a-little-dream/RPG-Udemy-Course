@@ -138,22 +138,22 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UI_White_Transperent_0
+      name: UI_White_Transperent_2
       rect:
         serializedVersion: 2
         x: 239
         y: 518
         width: 66
-        height: 64
+        height: 63
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 9, y: 9, z: 9, w: 9}
+      border: {x: 9, y: 9, z: 9, w: 8}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 369d0a0c46a30424eb8531fddd1cf92e
-      internalID: -1667867848
+      spriteID: 26f4e28c2a43f6e41bf191d1b81c5cfa
+      internalID: -564837058
       vertices: []
       indices: 
       edges: []
@@ -169,9 +169,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      UIartdeco_PIPO_pack2_white_1: 2145175254
-      UIartdeco_PIPO_pack2_white_0: 1968567152
       UI_White_Transperent_0: -1667867848
+      UI_White_Transperent_1: 673456789
+      UI_White_Transperent_2: -564837058
+      UIartdeco_PIPO_pack2_white_0: 1968567152
+      UIartdeco_PIPO_pack2_white_1: 2145175254
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

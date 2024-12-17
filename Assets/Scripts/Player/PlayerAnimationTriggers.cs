@@ -22,7 +22,11 @@ public class PlayerAnimationTriggers : MonoBehaviour
             {
                 EnemyStats _target = hit.GetComponent<EnemyStats>();
 
-                player.stats.DoDamage(_target);
+                if(_target != null)
+                    player.stats.DoDamage(_target);
+
+                //inventory get weapon call item effect
+                Inventory.instance.GetEquipment(EquipmentType.Weapon)?.Effect(_target.transform);
             }
         }
     }

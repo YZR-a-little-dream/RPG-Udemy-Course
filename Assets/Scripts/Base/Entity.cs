@@ -73,7 +73,7 @@ public class Entity : MonoBehaviour
     protected virtual IEnumerator HitKnockback()
     {
         isKnocked = true;
-        
+
         rb.velocity = new Vector2(knockbackDiretion.x * -facingDir,knockbackDiretion.y);
 
         yield return new WaitForSeconds(knockbackDuration);

@@ -1,6 +1,25 @@
 using System;
+using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+
+public enum StatType
+ {
+    strength,
+    agility,
+    intelligence,
+    vitality,
+    damage,
+    critChance,
+    critPower,
+    maxHealth,
+    armor,
+    evasion,
+    magicResistance,
+    fireDamage,
+    iceDamage,
+    lightingDamage
+ }
 
 public class CharacterStats : MonoBehaviour
 {
@@ -48,7 +67,7 @@ public class CharacterStats : MonoBehaviour
     public int currentHealth;
 
     public Action onHealthChanged;
-    protected bool isDead;              //fixed The monster still receives death damage when it dies
+    public bool isDead {get; private set;}          //fixed The monster still receives death damage when it dies
 
     protected virtual void Start() {
         critPower.SetDefaultValue(150);
@@ -78,6 +97,22 @@ public class CharacterStats : MonoBehaviour
             ApplyIgniteDamage();
     }   
 
+    public virtual void IncreaseStatBy(int _modifier,float _duration,Stat _statToModify)
+    {
+        //start coroutine for stat increase
+        StartCoroutine(statModCoroutine(_modifier, _modifier, _statToModify));
+    }
+
+    private IEnumerator statModCoroutine(int _modifier,float _duration,Stat _statToModify)
+    {
+        _statToModify.AddModifier(_modifier);
+
+        yield return new WaitForSeconds(_duration);
+
+        _statToModify.RemoveModifier(_modifier);
+    }
+    
+
     public virtual void DoDamage(CharacterStats _targetStats)
     {
         if (targetCanAvoidAttack(_targetStats))
@@ -96,8 +131,9 @@ public class CharacterStats : MonoBehaviour
         totalDamage = CheckTargetArmor(_targetStats, totalDamage);
         _targetStats.TakeDamage(totalDamage);
 
-        //TODO: if inventory current weapon has fire effect
-        //DoMagicalDamage(_targetStats);
+        //if inventory current weapon has fire effect
+        //remove if you don't want to apply magic hit on primary attack
+        DoMagicalDamage(_targetStats);
     }
 
     #region Magical damage and ailements
@@ -290,6 +326,18 @@ public class CharacterStats : MonoBehaviour
         }
     }
 
+    public virtual void IncreaseHelathBy(int _amount)
+    {
+        currentHealth += _amount;
+
+        if(currentHealth >= GetMaxHealthValue())
+        {
+            currentHealth = GetMaxHealthValue();
+        }
+
+        onHealthChanged?.Invoke(); 
+    }
+
     //Reducing health alone has no other effect
     protected virtual void DecreaseHealthyBy(int _damage)
     {
@@ -367,4 +415,57 @@ public class CharacterStats : MonoBehaviour
     public int GetMaxHealthValue() => maxHealth.GetValue() + vitality.GetValue() * 5;
 
     #endregion
+
+    public Stat GetStat(StatType _statType)
+    {
+        switch (_statType)
+        {
+            case StatType.strength:
+                return strength;
+
+            case StatType.agility:
+                return agility;
+
+            case StatType.intelligence:
+                return intelligence;
+
+            case StatType.vitality:
+                return vitality;
+
+            case StatType.damage:
+                return damage;
+
+            case StatType.critChance:
+                return critChance;
+
+            case StatType.critPower:
+                return critPower;
+
+            case StatType.maxHealth:
+                return maxHealth;
+
+            case StatType.armor:
+                return armor;
+
+            case StatType.evasion:
+                return evasion;
+
+            case StatType.magicResistance:
+                return magicResistance;
+
+            case StatType.fireDamage:
+                return fireDamage;
+
+            case StatType.iceDamage:
+                return iceDamage;
+
+            case StatType.lightingDamage:
+                return lightingDamage;
+
+            default:
+                Debug.Log("Invalid buff type");
+                return null;
+        }
+
+    }
 }

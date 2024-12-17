@@ -16,10 +16,9 @@ public class Clone_Skill_Controller : MonoBehaviour
     private Transform closestEnemy;
     private int facingDir = 1;
 
-
     private bool canDuplicateClone;
     private float chanceToDuplicate;
-
+    
     private void Awake() {
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
