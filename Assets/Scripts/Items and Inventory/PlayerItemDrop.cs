@@ -24,7 +24,6 @@ public class PlayerItemDrop : ItemDrop
                 DropItem(item.data);
                 itemsToUnequip.Add(item);
             }
-
         }
 
         for (int i = 0; i < itemsToUnequip.Count; i++)

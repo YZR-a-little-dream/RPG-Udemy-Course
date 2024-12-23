@@ -41,4 +41,6 @@ public class ItemDrop : MonoBehaviour
 
         newDrop.GetComponent<ItemObject>().SetupItem(_itemData, randomVelocity);
     }
+
+    
 }
